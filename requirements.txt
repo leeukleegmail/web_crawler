@@ -1,0 +1,7 @@
+Flask==1.1.1
+Flask-Cors==3.0.8
+flask_uploads==0.2.1
+requests==2.18.4
+celery==4.4.1
+
+
