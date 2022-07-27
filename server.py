@@ -40,7 +40,7 @@ def home():
     return render_template("home.html")
 
 
-@app.route('/check/', methods=['post', 'get'])
+@app.route('/online/', methods=['post', 'get'])
 def check():
     online = []
     my_file = open(filename, "r")
@@ -58,7 +58,7 @@ def check():
     if not len(online):
         online.append(all_offline_message)
 
-    return render_template("check.html", data=online)
+    return render_template("online.html", data=online)
 
 
 def get_method(url):

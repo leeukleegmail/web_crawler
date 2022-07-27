@@ -8,7 +8,7 @@
 <h1>List Page</h1>
 <h2>Below is a list of all added items</h2>
     <p><a href="{{ url_for('add') }}">Add</a></p>
-    <p><a href="{{ url_for('check') }}">Check</a></p>
+    <p><a href="{{ url_for('online') }}">Online</a></p>
     <p><a href="{{ url_for('home') }}">Home</a></p>
     {% for item in data %}
     <p> {{ item }} </p>
