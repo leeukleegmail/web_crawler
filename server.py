@@ -35,14 +35,14 @@ def list_all():
     return render_template("list.html", data=data)
 
 
-@app.route('/', methods=['post', 'get'])
+@app.route('/', methods=['get'])
 def home():
     return render_template("home.html")
 
 
 @app.route('/online/', methods=['post', 'get'])
-def check():
-    online = []
+def online():
+    _online = []
     my_file = open(filename, "r")
     person_data = my_file.readlines()
     for person in person_data:
@@ -52,13 +52,13 @@ def check():
             "User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
         if str(session.get(base_url.format(person)).content).count("offline") == 6:
             print(online_message.format(person, base_url.format(person)))
-            online.append(online_message.format(person, base_url.format(person)))
+            _online.append(online_message.format(person, base_url.format(person)))
         else:
             print(offline_message.format(person))
-    if not len(online):
-        online.append(all_offline_message)
+    if not len(_online):
+        _online.append(all_offline_message)
 
-    return render_template("online.html", data=online)
+    return render_template("online.html", data=_online)
 
 
 def get_method(url):
@@ -74,4 +74,4 @@ def check_for_string(string_to_search):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
