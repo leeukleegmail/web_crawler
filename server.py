@@ -36,6 +36,11 @@ def list_all():
 
 
 @app.route('/', methods=['post', 'get'])
+def home():
+    return render_template("home.html")
+
+
+@app.route('/check/', methods=['post', 'get'])
 def check():
     online = []
     my_file = open(filename, "r")
@@ -45,7 +50,7 @@ def check():
         session = requests.Session()
         session.headers[
             "User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
-        if str(session.get(base_url.format(person)).content).count("offline") == 4:
+        if str(session.get(base_url.format(person)).content).count("offline") == 6:
             print(online_message.format(person, base_url.format(person)))
             online.append(online_message.format(person, base_url.format(person)))
         else:
