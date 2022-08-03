@@ -1,3 +1,5 @@
+import time
+
 import requests
 from flask import Flask, render_template, request
 from flask_cors import CORS
@@ -8,6 +10,7 @@ from config import filename, base_url, does_not_exist_message, added_message, al
 app = Flask(__name__, static_folder='templates/assets', static_url_path='/assets')
 CORS(app)
 
+headers = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
 
 @app.route('/add/', methods=['post', 'get'])
 def add():
@@ -48,9 +51,14 @@ def online():
     for person in person_data:
         person = person.rstrip("\n")
         session = requests.Session()
-        session.headers[
-            "User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
-        if str(session.get(base_url.format(person)).content).count("offline") == 6:
+        session.headers["User-Agent"] = headers
+        resp = session.get(base_url.format(person))
+        offline_count = str(resp.content).count("offline")
+        print("status code is {}".format(resp.status_code))
+        if resp.status_code == 429:
+            time.sleep(2)
+        print("off line count is {}.".format(offline_count))
+        if offline_count == 6:
             print(online_message.format(person, base_url.format(person)))
             _online.append(online_message.format(person, base_url.format(person)))
         else:
