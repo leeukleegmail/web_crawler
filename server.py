@@ -1,4 +1,3 @@
-import json
 import time
 
 import requests
@@ -6,7 +5,8 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 
 from config import filename, base_url, does_not_exist_message, added_message, already_added_message, \
-    all_offline_message, online_message, offline_message, removed_message
+    all_offline_message, online_message, offline_message, removed_message, remove_message_not_in_list, \
+    remove_empty_string
 
 app = Flask(__name__, static_folder='templates/assets', static_url_path='/assets')
 CORS(app)
@@ -39,16 +39,13 @@ def remove():
     if request.method == 'POST':
         person = request.form.get('name')
         if person:
-            with open(filename, "r") as f:
-                lines = f.readlines()
-            with open(filename, "w") as f:
-                for line in lines:
-                    print(line)
-                    if line.strip("\n") != person:
-                        print(line)
-                        f.write(line)
-            f.close()
-        message = removed_message.format(person)
+            found = remove_line_from_file(person)
+            if found:
+                message = removed_message.format(person)
+            else:
+                message = remove_message_not_in_list.format(person)
+        else:
+            message = remove_empty_string
     return render_template('remove.html', message=message)
 
 
@@ -87,8 +84,8 @@ def online():
             print(offline_message.format(person))
     if not len(_online):
         _online.update({all_offline_message: ""})
-    temp1 = [_online]
-    return render_template("online.html", data=temp1)
+    online_dict = [_online]
+    return render_template("online.html", data=online_dict)
 
 
 def get_method(url):
@@ -101,6 +98,21 @@ def check_for_string(string_to_search):
             if string_to_search in line:
                 return True
     return False
+
+
+def remove_line_from_file(person):
+    found = 0
+    with open(filename, "r") as f:
+        lines = f.readlines()
+    with open(filename, "w") as f:
+        for line in lines:
+            print(line)
+            if line.strip("\n") == person:
+                found = 1
+            else:
+                f.write(line)
+        f.close()
+    return found
 
 
 if __name__ == "__main__":
