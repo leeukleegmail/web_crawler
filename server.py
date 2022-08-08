@@ -1,17 +1,15 @@
-import time
-
 import requests
 from flask import Flask, render_template, request
 from flask_cors import CORS
 
 from config import filename, base_url, does_not_exist_message, added_message, already_added_message, \
-    all_offline_message, online_message, offline_message, removed_message, remove_message_not_in_list, \
+    all_offline_message, online_message, removed_message, remove_message_not_in_list, \
     remove_empty_string
 
 app = Flask(__name__, static_folder='templates/assets', static_url_path='/assets')
 CORS(app)
 
-headers = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
+headers = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
 
 
 @app.route('/add/', methods=['post', 'get'])
@@ -24,7 +22,7 @@ def add():
         else:
             if not check_for_string(person):
                 with open(filename, 'a') as file:
-                    file.write("{}\n".format(person))
+                    file.write('{}\n'.format(person))
                     file.close()
                 message = added_message.format(person)
             else:
@@ -35,7 +33,7 @@ def add():
 
 @app.route('/remove/', methods=['post', 'get'])
 def remove():
-    message = ""
+    message = ''
     if request.method == 'POST':
         person = request.form.get('name')
         if person:
@@ -51,41 +49,40 @@ def remove():
 
 @app.route('/list/')
 def list_all():
-    my_file = open(filename, "r")
+    my_file = open(filename, 'r')
     data = my_file.readlines()
-    return render_template("list.html", data=data)
+    return render_template('list.html', data=data)
 
 
 @app.route('/', methods=['get'])
 def home():
-    return render_template("home.html")
+    return render_template('home.html')
 
 
 @app.route('/online/', methods=['post', 'get'])
 def online():
     _online = {}
-    my_file = open(filename, "r")
-    person_data = my_file.readlines()
+    person_data = read_file()
     for person in person_data:
-        person = person.rstrip("\n")
-        session = requests.Session()
-        session.headers["User-Agent"] = headers
-        resp = session.get(base_url.format(person))
-        offline_count = str(resp.content).count("offline")
-        print("status code is {}".format(resp.status_code))
+        resp = make_request(person)
+
         if resp.status_code == 429:
-            time.sleep(2)
-        print("off line count is {}.".format(offline_count))
+            print('status code is {}'.format(resp.status_code))
+            _dict = [{all_offline_message: ''}]
+            return render_template('online.html', data=_dict)
+
+        offline_count = str(resp.content).count('offline')
+
         if offline_count == 6:
+            print('off line count is {}.'.format(offline_count))
             print(online_message.format(person))
             new_key_values_dict = {online_message.format(person): base_url.format(person)}
             _online.update(new_key_values_dict)
-        else:
-            print(offline_message.format(person))
+
     if not len(_online):
-        _online.update({all_offline_message: ""})
+        _online.update({all_offline_message: ''})
     online_dict = [_online]
-    return render_template("online.html", data=online_dict)
+    return render_template('online.html', data=online_dict)
 
 
 def get_method(url):
@@ -102,12 +99,11 @@ def check_for_string(string_to_search):
 
 def remove_line_from_file(person):
     found = 0
-    with open(filename, "r") as f:
-        lines = f.readlines()
-    with open(filename, "w") as f:
+    lines = read_file()
+    with open(filename, 'w') as f:
         for line in lines:
             print(line)
-            if line.strip("\n") == person:
+            if line.strip('\n') == person:
                 found = 1
             else:
                 f.write(line)
@@ -115,5 +111,19 @@ def remove_line_from_file(person):
     return found
 
 
-if __name__ == "__main__":
+def make_request(person):
+    person = person.rstrip('\n')
+    session = requests.Session()
+    session.headers['User-Agent'] = headers
+    return session.get(base_url.format(person))
+
+
+def read_file():
+    f = open(filename, 'r')
+    lines = f.readlines()
+    f.close()
+    return lines
+
+
+if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

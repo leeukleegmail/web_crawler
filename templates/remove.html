@@ -17,14 +17,15 @@
             Add
         </button>
     </p>
-    <p>
-        <button onclick="location.href='{{ url_for('online') }}'; $('#loading').show();" type="button" class="button">
-            Online
-        </button>
-    </p>
+
     <p>
         <button onclick="location.href='{{ url_for('home') }}'" type="button" class="button">
             Home
+        </button>
+    </p>
+    <p>
+        <button class="button" onclick="location.href='{{ url_for('online') }}'; $('#loading').show();" type="button">
+            Online
         </button>
     </p>
     <p>
