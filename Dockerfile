@@ -2,7 +2,11 @@
 
 FROM python:3.8-slim-buster
 
-WORKDIR /web_crawler
+
+ARG container_name
+ENV CONTAINER_NAME $container_name
+
+WORKDIR /$CONTAINER_NAME
 
 COPY requirements.txt requirements.txt
 RUN /usr/local/bin/python -m pip install --upgrade pip
