@@ -12,24 +12,15 @@
 
 <form action="" method="post">
     <p>
-
-    <p>
         <button onclick="location.href='{{ url_for('home') }}'" type="button" class="button">
             Home
         </button>
-    </p>
-    <p>
         <button class="button" onclick="location.href='{{ url_for('list_all') }}'" type="button">
             List
         </button>
-    </p>
-    <p>
         <button class="button" onclick="location.href='{{ url_for('online') }}'; $('#loading').show();" type="button">
             Online
         </button>
-    </p>
-
-    <p>
         <button onclick="location.href='{{ url_for('remove') }}'" type="button" class="button">
             Remove
         </button>
@@ -41,7 +32,7 @@
     <p>
         <label for="modelname">Model Name</label>
         <input name="name" type="text">
-        <input type="submit">
+        <input type="submit" class="button">
     </p>
 </form>
 <div id="loading" style="display:none;"><img alt="" src="../assets/test.gif"/></div>

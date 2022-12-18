@@ -15,10 +15,10 @@ img{
 }
 
 .button {
-  background-color: #a8a7a2; /* Green */
+  background-color: #20BEFA; /* Green */
   border: none;
-  color: white;
-  padding: 16px 32px;
+  border-radius: 15px 15px;
+  color: black;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -26,5 +26,5 @@ img{
   margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
-  width: 250px;
+  width: 100px;
 }
