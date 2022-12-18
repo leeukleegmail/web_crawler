@@ -21,9 +21,6 @@
         <button class="button" onclick="location.href='{{ url_for('online') }}'; $('#loading').show();" type="button">
             Online
         </button>
-        <button onclick="location.href='{{ url_for('remove') }}'" type="button" class="button">
-            Remove
-        </button>
     </p>
 
     {% if message %}
@@ -32,7 +29,7 @@
     <p>
         <label for="modelname">Model Name</label>
         <input name="name" type="text">
-        <input type="submit" class="button">
+        <input type="submit" class="button" value="Add">
     </p>
 </form>
 <div id="loading" style="display:none;"><img alt="" src="../assets/test.gif"/></div>

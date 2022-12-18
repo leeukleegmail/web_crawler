@@ -31,8 +31,8 @@ def add():
     return render_template('add.html', message=message)
 
 
-@app.route('/remove/', methods=['post', 'get'])
-def remove():
+@app.route('/list/', methods=['post', 'get'])
+def list_all():
     message = ''
     if request.method == 'POST':
         person = request.form.get('name')
@@ -44,14 +44,9 @@ def remove():
                 message = remove_message_not_in_list.format(person)
         else:
             message = remove_empty_string
-    return render_template('remove.html', message=message)
-
-
-@app.route('/list/')
-def list_all():
     my_file = open(filename, 'r')
     data = my_file.readlines()
-    return render_template('list.html', data=data)
+    return render_template('list.html', data=data,  message=message)
 
 
 @app.route('/', methods=['get'])
