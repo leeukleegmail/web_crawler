@@ -1,5 +1,4 @@
-FROM python:3
-
+FROM python:3.8.3-alpine
 
 ARG container_name
 ENV CONTAINER_NAME $container_name
