@@ -1,10 +1,12 @@
+import time
+
 import requests
 from flask import Flask, render_template, request
 from flask_cors import CORS
 
 from config import filename, base_url, does_not_exist_message, added_message, already_added_message, \
     all_offline_message, online_message, removed_message, remove_message_not_in_list, \
-    remove_empty_string
+    remove_empty_string, too_many_requests
 
 app = Flask(__name__, static_folder='templates/assets', static_url_path='/assets')
 CORS(app)
@@ -57,18 +59,19 @@ def home():
 @app.route('/online/', methods=['post', 'get'])
 def online():
     _online = {}
-    person_data = read_file()
+    person_data = sorted(read_file())
     for person in person_data:
+        time.sleep(1)
         resp = make_request(person)
 
         if resp.status_code == 429:
             print('status code is {}'.format(resp.status_code))
-            _dict = [{all_offline_message: ''}]
+            _dict = [{too_many_requests: ''}]
             return render_template('online.html', data=_dict)
 
         offline_count = str(resp.content).count('offline')
 
-        if offline_count == 6:
+        if offline_count == 4:
             print('off line count is {}.'.format(offline_count))
             print(online_message.format(person))
             new_key_values_dict = {online_message.format(person): base_url.format(person)}
