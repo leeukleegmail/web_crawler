@@ -66,7 +66,7 @@ def online():
 
         if resp.status_code == 429:
             print('status code is {}'.format(resp.status_code))
-            _dict = [{too_many_requests: ''}]
+            _dict = [{too_many_requests: base_url.format("")}]
             return render_template('online.html', data=_dict)
 
         offline_count = str(resp.content).count('offline')
@@ -78,7 +78,7 @@ def online():
             _online.update(new_key_values_dict)
 
     if not len(_online):
-        _online.update({all_offline_message: ''})
+        _online.update({all_offline_message: base_url.format("")})
     online_dict = [_online]
     return render_template('online.html', data=online_dict)
 
