@@ -1,13 +1,13 @@
-FROM python:3
+FROM python:3.10.11-alpine
 
 ARG container_name
 ENV CONTAINER_NAME $container_name
 
 WORKDIR /$CONTAINER_NAME
 
-RUN /usr/local/bin/python -m pip install --upgrade pip
+RUN pip install --upgrade pip
 
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
-CMD [ "python3", "server.py"]
+CMD [ "python", "server.py"]
