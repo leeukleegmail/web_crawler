@@ -28,3 +28,11 @@ img{
   cursor: pointer;
   width: 100px;
 }
+
+div#loading {
+    width: 35px;
+    height: 35px;
+    display: none;
+    background: url(../assets/test.gif) no-repeat;
+    cursor: wait;
+}

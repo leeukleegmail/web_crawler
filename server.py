@@ -1,3 +1,4 @@
+import logging
 import time
 
 import requests
@@ -13,6 +14,7 @@ CORS(app)
 
 headers = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
 
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/add/', methods=['post', 'get'])
 def add():
@@ -51,7 +53,7 @@ def list_all():
     return render_template('list.html', data=data,  message=message)
 
 
-@app.route('/', methods=['get'])
+@app.route('/', methods=['get', 'post'])
 def home():
     return render_template('home.html')
 
@@ -65,15 +67,15 @@ def online():
         resp = make_request(person)
 
         if resp.status_code == 429:
-            print('status code is {}'.format(resp.status_code))
+            logging.error('Status code was {}'.format(resp.status_code))
             _dict = [{too_many_requests: base_url.format("")}]
             return render_template('online.html', data=_dict)
 
         offline_count = str(resp.content).count('offline')
 
         if offline_count == 4:
-            print('off line count is {}.'.format(offline_count))
-            print(online_message.format(person))
+            logging.info("Off line count is {}.".format(offline_count))
+            logging.info(online_message.format(person))
             new_key_values_dict = {online_message.format(person): base_url.format(person)}
             _online.update(new_key_values_dict)
 
