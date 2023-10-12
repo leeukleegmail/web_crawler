@@ -1,5 +1,4 @@
 import logging
-import time
 
 import requests
 from flask import Flask, render_template, request
@@ -63,7 +62,7 @@ def online():
     _online = {}
     person_data = sorted(read_file())
     for person in person_data:
-        time.sleep(1)
+        # time.sleep(1)1
         resp = make_request(person)
 
         if resp.status_code == 429:
