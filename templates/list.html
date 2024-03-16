@@ -22,8 +22,10 @@
         </button>
     </p>
 
-    {% for item in data %}
-    <p> {{ item }} </p>
+    {% for dict_item in data %}
+    {% for key, value in dict_item.items() %}
+    <p><a href="{{value}}">{{key}}</a></p>
+    {% endfor %}
     {% endfor %}
 
         {% if message %}

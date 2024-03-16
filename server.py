@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from config import filename, base_url, does_not_exist_message, added_message, already_added_message, \
     all_offline_message, online_message, removed_message, remove_message_not_in_list, \
-    remove_empty_string, too_many_requests
+    remove_empty_string, too_many_requests, list_all_message
 
 app = Flask(__name__, static_folder='templates/assets', static_url_path='/assets')
 CORS(app)
@@ -47,8 +47,18 @@ def list_all():
                 message = remove_message_not_in_list.format(person)
         else:
             message = remove_empty_string
+
     my_file = open(filename, 'r')
-    data = my_file.readlines()
+    people = my_file.readlines()
+    my_file.close()
+
+    people_list = {}
+    for person in people:
+        new_key_values_dict = {list_all_message.format(person): base_url.format(person)}
+        people_list.update(new_key_values_dict)
+
+    data = [people_list]
+
     return render_template('list.html', data=data,  message=message)
 
 
@@ -62,7 +72,6 @@ def online():
     _online = {}
     person_data = sorted(read_file())
     for person in person_data:
-        # time.sleep(1)1
         resp = make_request(person)
 
         if resp.status_code == 429:
@@ -101,7 +110,6 @@ def remove_line_from_file(person):
     lines = read_file()
     with open(filename, 'w') as f:
         for line in lines:
-            print(line)
             if line.strip('\n') == person:
                 found = 1
             else:
