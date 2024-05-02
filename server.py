@@ -81,6 +81,9 @@ def online():
 
         offline_count = str(resp.content).count('offline')
 
+        logging.info(offline_count)
+        logging.info(person)
+
         if offline_count == 4:
             logging.info("Off line count is {}.".format(offline_count))
             logging.info(online_message.format(person))
