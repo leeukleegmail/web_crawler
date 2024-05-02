@@ -84,7 +84,7 @@ def online():
         logging.info(offline_count)
         logging.info(person)
 
-        if offline_count == 4:
+        if offline_count == 5:
             logging.info("Off line count is {}.".format(offline_count))
             logging.info(online_message.format(person))
             new_key_values_dict = {online_message.format(person): base_url.format(person)}
