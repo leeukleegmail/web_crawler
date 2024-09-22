@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import requests
 from flask import Flask, render_template, request
@@ -69,6 +70,12 @@ def home():
 
 @app.route('/online/', methods=['post', 'get'])
 def online():
+    import pytz
+
+    tz = pytz.timezone('Europe/Amsterdam')
+    now = datetime.now(tz)
+    logging.info(f'Online check called at {now}')
+
     _online = {}
     person_data = sorted(read_file())
     for person in person_data:
