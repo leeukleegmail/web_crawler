@@ -88,12 +88,9 @@ def online():
 
         offline_count = str(resp.content).count('offline')
 
-        logging.info(offline_count)
-        logging.info(person)
+        logging.info(f'Offline count for user {person} is {offline_count}')
 
         if offline_count == 5:
-            logging.info("Off line count is {}.".format(offline_count))
-            logging.info(online_message.format(person))
             new_key_values_dict = {online_message.format(person): base_url.format(person)}
             _online.update(new_key_values_dict)
 
