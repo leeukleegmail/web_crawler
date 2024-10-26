@@ -96,7 +96,9 @@ def online():
 
     if not len(_online):
         _online.update({all_offline_message: base_url.format("")})
+
     online_dict = [_online]
+    online_dict.append({f"Last check was {now.strftime("%H:%M:%S")}": ''})
     return render_template('online.html', data=online_dict)
 
 
